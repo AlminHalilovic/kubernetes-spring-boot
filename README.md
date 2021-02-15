@@ -18,6 +18,7 @@ Architecture is based on domain driven design, where each domain has its namespa
 | account-management | Sample microservice that is used for updating order of accounts. It is exposed from kubernetes cluster with ingress object. | https://github.com/AlminHalilovic/account-management
 | user-config-server | Config repo used for purpose of microservices in **user** domain | https://github.com/AlminHalilovic/user-config-repo
 | user-settings | Sample microservice that stores user preferences for account order. | https://github.com/AlminHalilovic/user-settings
+| spring-boot-config-server | Spring Boot Config server application. You can use it to run config server locally, or build docker image from it. | https://github.com/AlminHalilovic/spring-boot-config-server
 | PostgreSQL | PostgreSQL server deployed inside K8s cluster. | -
 
 # Configuring the cluster
