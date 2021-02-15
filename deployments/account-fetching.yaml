@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: account-fetching
+  name: account-fetching
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-fetching
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: account-fetching
+    spec:
+      containers:
+      - image: alminklika/account-fetching:0.0.9
+        name: account-fetching
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            memory: "600Mi"
+          requests:
+            memory: "300Mi"
+        
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: account-fetching
+  name: account-fetching
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: account-fetching
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: account-fetching-ingress
+  namespace: account
+spec:
+  rules:
+  - host: "account-fetching-almin.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: account-fetching
+            port:
+              number: 8080

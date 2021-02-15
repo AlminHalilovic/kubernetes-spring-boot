@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: account-config-server
+  name: account-config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-config-server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: account-config-server
+    spec:
+      containers:
+      - image: alminklika/spring-config-server:0.0.1
+        name: account-config-server
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            memory: "500Mi"
+          requests:
+            memory: "300Mi"
+        env:
+        - name: spring.application.name
+          value: "account-config-server"
+        - name: spring.cloud.config.server.git.uri
+          value: "https://github.com/AlminHalilovic/account-config-repo"
+        - name: spring.cloud.config.server.git.search-paths
+          value: "/"
+        - name: spring.cloud.config.server.git.default-label
+          value: "main"
+        - name: spring.jackson.serialization.indent_output
+          value: "true"  
+        
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: account-config-server
+  name: account-config-server
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: account-config-server
+  type: ClusterIP
+status:
+  loadBalancer: {}

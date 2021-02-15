@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: account-management
+  name: account-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-management
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: account-management
+    spec:
+      containers:
+      - image: alminklika/account-management:0.0.6
+        name: account-management
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            memory: "800Mi"
+          requests:
+            memory: "300Mi"
+        
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: account-management
+  name: account-management
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: account-management
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: account-management-ingress
+  namespace: account
+spec:
+  rules:
+  - host: "account-management-almin.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: account-management
+            port:
+              number: 8080

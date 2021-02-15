@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: user-settings
+  name: user-settings
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-settings
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: user-settings
+    spec:
+      containers:
+      - image: alminklika/user-settings:0.0.7
+        name: user-settings
+        ports:
+        - containerPort: 8080
+        env:
+        - name: spring.datasource.url
+          value: "jdbc:postgresql://k8s-postgres.postgres.svc.cluster.local:5432/postgres"
+        - name: spring.datasource.username
+          value: "postgres"
+        - name: spring.datasource.password
+          value: "password"
+        - name: spring.flyway.schemas
+          value: "user_settings"  
+        resources:
+          limits:
+            memory: "650Mi"
+          requests:
+            memory: "300Mi"
+        
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: user-settings
+  name: user-settings
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: user-settings
+  type: ClusterIP
+status:
+  loadBalancer: {}
