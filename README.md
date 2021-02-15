@@ -21,8 +21,10 @@ Architecture is based on domain driven design, where each domain has its namespa
 | PostgreSQL | PostgreSQL server deployed inside K8s cluster. | -
 
 # Configuring the cluster
-You can configure the cluster on your local machine by using [Minikube](https://minikube.sigs.k8s.io/docs/start/)
-. Below is the order in which you can apply the scripts using [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+You can configure the cluster on your local machine by using [Minikube](https://minikube.sigs.k8s.io/docs/start/). Once you have minikube installed, you can start up your cluster with following command:
+- `minikube start --vm=true --driver=hyperkit --memory=3072` > Note that we are giving 3GB of memory to our cluster. Reason for that is that Spring Boot applications can be resource hungry, so we want to make sure cluster has enough resources to handle our setup. There are ways to optimize resource consumption of Spring Boot applications inside K8S cluster, but that is out of scope for this tutorial.
+
+Next you want to install [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/). After it is done, you need to execute scripts in this repo in following order.
 
 1. Go inside **namespaces** directory. Deploy namespaces listed inside.
 ``` kubectl apply -f account-namespace.yaml -f postgres-namespace.yaml -f user-namespace.yaml ```
